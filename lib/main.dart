@@ -1,27 +1,52 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'features/question_answer/presentation/question_answer_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'features/quiz/presentation/quiz_screen.dart';
+import 'features/quiz/repositories/quiz_repository.dart';
+import 'features/quiz/services/quiz_service.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  final prefs = await SharedPreferences.getInstance();
+  runApp(MyApp(prefs: prefs));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final SharedPreferences prefs;
+
+  const MyApp({super.key, required this.prefs});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'AI Study Buddy',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('AI Study Buddy'),
-          backgroundColor: Colors.blue,
+    return MultiProvider(
+      providers: [
+        Provider<QuizRepository>(
+          create: (_) => QuizRepository(),
         ),
-        body: const QuestionAnswerScreen(),
+        Provider<QuizService>(
+          create: (_) => QuizService(prefs),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'AI Study Buddy',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        home: Scaffold(
+          appBar: AppBar(
+            title: const Text('AI Study Buddy'),
+            backgroundColor: Colors.blue,
+          ),
+          body: const QuizScreen(),
+        ),
       ),
     );
   }
