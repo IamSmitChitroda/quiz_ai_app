@@ -66,6 +66,11 @@ flutter pub get
 flutter run -d chrome --web-hostname localhost --web-port 1887
 ```
 
+4. Check the application
+```bash
+http://localhost:1887/
+```
+
 ## Building for Production
 
 ```bash
