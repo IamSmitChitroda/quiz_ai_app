@@ -3,7 +3,7 @@ import '../../question_answer/presentation/question_answer_screen.dart';
 import '../../quiz/presentation/quiz_screen.dart';
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
