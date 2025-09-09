@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/quiz_bloc.dart';
 
 class QuizForm extends StatefulWidget {
-  const QuizForm({Key? key}) : super(key: key);
+  const QuizForm({super.key});
 
   @override
   State<QuizForm> createState() => _QuizFormState();
@@ -92,14 +92,15 @@ class _QuizFormState extends State<QuizForm> {
                 value: 'en',
                 child: Text('English'),
               ),
-              DropdownMenuItem(
+
+              /*DropdownMenuItem(
                 value: 'hi',
                 child: Text('Hindi'),
               ),
               DropdownMenuItem(
                 value: 'gu',
                 child: Text('Gujarati'),
-              ),
+              ),*/
             ],
             onChanged: (value) {
               setState(() {

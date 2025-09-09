@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'features/quiz/presentation/quiz_screen.dart';
+import 'features/dashboard/presentation/dashboard_screen.dart';
 import 'features/quiz/repositories/quiz_repository.dart';
 import 'features/quiz/services/quiz_service.dart';
 import 'firebase_options.dart';
@@ -40,13 +40,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
           useMaterial3: true,
         ),
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('AI Study Buddy'),
-            backgroundColor: Colors.blue,
-          ),
-          body: const QuizScreen(),
-        ),
+        home: const DashboardScreen(),
       ),
     );
   }

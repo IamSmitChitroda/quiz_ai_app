@@ -8,6 +8,51 @@ import '../models/quiz_question.dart';
 
 class QuizRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final http.Client _client = http.Client();
+
+  void dispose() {
+    _client.close();
+  }
+
+  String _buildQuizPrompt(String topic, String level, String locale) {
+    return '''
+    Generate a multiple choice quiz about $topic in $locale language with difficulty level: $level.
+    Requirements:
+    - Exactly 5 questions
+    - Each question must have:
+      * A clear stem/question text
+      * Exactly 4 options
+      * One correct answer
+      * A brief explanation (max 60 words)
+    - Questions should be distinct
+    - All options should be plausible
+    - Return in JSON format with structure:
+    {
+      "questions": [
+        {
+          "stem": "question text",
+          "options": ["option1", "option2", "option3", "option4"],
+          "correctOptionIndex": 0-3,
+          "explanation": "why this is correct"
+        }
+      ]
+    }
+    ''';
+  }
+
+  Future<void> _logQuizGeneration(Quiz quiz) async {
+    try {
+      await _firestore.collection('quizLogs').add({
+        'event': 'quiz_generated',
+        'topic': quiz.topic,
+        'level': quiz.level,
+        'locale': quiz.locale,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      print('Failed to log quiz generation: $e');
+    }
+  }
 
   Future<Quiz> generateQuiz({
     required String topic,
@@ -17,7 +62,7 @@ class QuizRepository {
     final prompt = _buildQuizPrompt(topic, level, locale);
 
     try {
-      final response = await http.post(
+      final response = await _client.post(
         Uri.parse(ApiConfig.groqBaseUrl),
         headers: ApiConfig.headers,
         body: jsonEncode({
@@ -32,25 +77,64 @@ class QuizRepository {
         }),
       );
 
+      log(response.body);
+
       if (response.statusCode != 200) {
         throw Exception('Failed to generate quiz: ${response.body}');
       }
 
-      final jsonResponse = jsonDecode(response.body);
-      final messageContent = jsonResponse['choices'][0]['message']['content'];
+      // First parse the API response
+      Map<String, dynamic> jsonResponse;
+      try {
+        jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
+      } catch (e) {
+        throw FormatException('Invalid API response format: $e');
+      }
 
-      // The content is a string containing JSON, so we need to parse it
-      final quizData = jsonDecode(messageContent) as Map<String, dynamic>;
+      if (!jsonResponse.containsKey('choices') ||
+          jsonResponse['choices'].isEmpty ||
+          !jsonResponse['choices'][0].containsKey('message') ||
+          !jsonResponse['choices'][0]['message'].containsKey('content')) {
+        throw FormatException('Invalid API response structure');
+      }
 
-      // Extract questions from the response
-      final questions = (quizData['questions'] as List)
-          .map((q) => QuizQuestion(
-                stem: q['stem'] as String,
-                options: List<String>.from(q['options'] as List),
-                correctOptionIndex: q['correctOptionIndex'] as int,
-                explanation: q['explanation'] as String,
-              ))
-          .toList();
+      final messageContent =
+          jsonResponse['choices'][0]['message']['content'] as String;
+
+      // Clean up the content - remove code block markers if present
+      final cleanContent =
+          messageContent.replaceAll('```json', '').replaceAll('```', '').trim();
+
+      // Parse the cleaned quiz data
+      Map<String, dynamic> quizData;
+      try {
+        quizData = jsonDecode(cleanContent) as Map<String, dynamic>;
+      } catch (e) {
+        throw FormatException('Invalid quiz data format: $e');
+      }
+
+      if (!quizData.containsKey('questions')) {
+        throw FormatException('Quiz data is missing questions array');
+      }
+
+      List<QuizQuestion> questions;
+      try {
+        questions = (quizData['questions'] as List)
+            .map((q) => QuizQuestion(
+                  stem: q['stem'] as String,
+                  options: List<String>.from(q['options'] as List),
+                  correctOptionIndex: q['correctOptionIndex'] as int,
+                  explanation: q['explanation'] as String,
+                ))
+            .toList();
+      } catch (e) {
+        throw FormatException('Invalid question format: $e');
+      }
+
+      // Validate question count
+      if (questions.length != 5) {
+        throw FormatException('Quiz must contain exactly 5 questions');
+      }
 
       final quiz = Quiz(
         topic: topic,
@@ -67,22 +151,10 @@ class QuizRepository {
 
       return quiz;
     } catch (e) {
+      if (e is FormatException) {
+        throw e; // Re-throw format exceptions as is
+      }
       throw Exception('Failed to generate quiz: $e');
-    }
-  }
-
-  Future<void> _logQuizGeneration(Quiz quiz) async {
-    try {
-      await _firestore.collection('quizLogs').add({
-        'event': 'quiz_generated',
-        'topic': quiz.topic,
-        'level': quiz.level,
-        'locale': quiz.locale,
-        'timestamp': FieldValue.serverTimestamp(),
-      });
-    } catch (e) {
-      // Non-blocking logging - just print the error
-      print('Failed to log quiz generation: $e');
     }
   }
 
@@ -97,34 +169,7 @@ class QuizRepository {
         'timestamp': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      // Non-blocking logging - just print the error
       print('Failed to log quiz completion: $e');
     }
-  }
-
-  String _buildQuizPrompt(String topic, String level, String locale) {
-    return '''
-    Generate a multiple choice quiz about $topic in $locale language with difficulty level: $level.
-    Requirements:
-    - Exactly 5 questions
-    - Each question must have:
-      * A clear stem/question text
-      * Exactly 4 options (A, B, C, D)
-      * One correct answer
-      * A brief explanation (max 60 words)
-    - Questions should be distinct
-    - All options should be plausible
-    - Return in JSON format with structure:
-    {
-      "questions": [
-        {
-          "stem": "question text",
-          "options": ["A", "B", "C", "D"],
-          "correctOptionIndex": 0-3,
-          "explanation": "why this is correct"
-        }
-      ]
-    }
-    ''';
   }
 }
