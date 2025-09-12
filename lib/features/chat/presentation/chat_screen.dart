@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import '../../auth/bloc/auth_bloc.dart';
 import '../bloc/chat_bloc.dart';
 import '../models/chat_message.dart';
 import '../repositories/chat_repository.dart';
@@ -59,6 +60,13 @@ class _ChatViewState extends State<ChatView> {
               context.read<ChatBloc>().add(ClearChat());
             },
             tooltip: 'Clear Chat',
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthBloc>().add(SignOutRequested());
+            },
+            tooltip: 'Sign Out',
           ),
         ],
       ),
