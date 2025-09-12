@@ -1,6 +1,13 @@
 # Quiz AI App
 
-A modern, interactive quiz application built with Flutter that leverages AI to generate and manage quizzes. This application combines the power of artificial intelligence with an intuitive user interface to create engaging learning experiences.
+[![Flutter Version](https://img.shields.io/badge/Flutter-3.x-blue.svg)](https://flutter.dev/)
+[![Dart Version](https://img.shields.io/badge/Dart-3.x-blue.svg)](https://dart.dev/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/IamSmitChitroda/quiz_ai_app)
+
+A cutting-edge, AI-powered quiz application built with Flutter that revolutionizes the learning experience. By combining state-of-the-art artificial intelligence with a sleek, modern user interface, Quiz AI App delivers personalized, engaging, and adaptive learning experiences for users of all levels.
+
+Whether you're a student preparing for exams, a professional looking to expand your knowledge, or an educator creating assessment materials, Quiz AI App provides an intelligent solution for interactive learning and assessment.
 
 ## Live Demo
 
@@ -18,13 +25,29 @@ Quiz AI App is a sophisticated web-based application that empowers users to:
 
 ## Tech Stack
 
-- **Frontend Framework**: Flutter Web
-- **State Management**: BLoC (Business Logic Component) Pattern
-- **Backend Services**: Firebase (Authentication, Firestore, Hosting)
-- **AI Integration**: OpenAI API (GPT for quiz generation and chat)
-- **Development Language**: Dart
-- **CI/CD**: Firebase Hosting with GitHub Actions
-- **Analytics**: Firebase Analytics
+- **Frontend Framework**: Flutter Web (v3.x)
+  - Material Design 3
+  - Responsive layouts
+  - Web optimized performance
+- **State Management**: 
+  - BLoC Pattern (flutter_bloc: ^8.x)
+  - Cubit for simpler state flows
+- **Backend Services**: Firebase
+  - Authentication (Email, Google Sign-in)
+  - Cloud Firestore (Real-time database)
+  - Firebase Hosting
+  - Cloud Functions
+- **AI Integration**: 
+  - OpenAI GPT-4 API for quiz generation
+  - GPT-3.5 Turbo for chat support
+- **Development Language**: Dart 3.x
+- **CI/CD**: 
+  - Firebase Hosting
+  - GitHub Actions for automated deployment
+- **Analytics & Monitoring**:
+  - Firebase Analytics
+  - Firebase Crashlytics
+  - Performance Monitoring
 
 ## Project Structure
 
@@ -147,17 +170,65 @@ Common issues and their solutions:
 - **Firebase Issues**: Verify your Firebase configuration
 - **API Errors**: Check your OpenAI API key and usage limits
 
+## Screenshots
+
+<details>
+<summary>Click to view screenshots</summary>
+
+### Dashboard
+[Coming Soon]
+
+### Quiz Interface
+[Coming Soon]
+
+### AI Chat Support
+[Coming Soon]
+
+### Analytics Dashboard
+[Coming Soon]
+
+</details>
+
+## Development Roadmap
+
+### Current Version (v1.0.0)
+- ✅ AI-powered quiz generation
+- ✅ Interactive quiz taking experience
+- ✅ User authentication
+- ✅ Basic analytics dashboard
+- ✅ AI chat support
+
+### Upcoming Features (v1.1.0)
+- 🚧 Offline quiz support
+- 🚧 Custom quiz templates
+- 🚧 Social sharing features
+- 🚧 Advanced analytics
+- 🚧 Multi-language support
+
+### Future Plans (v2.0.0)
+- 📋 Quiz collaboration features
+- 📋 Advanced AI adaptivity
+- 📋 Gamification elements
+- 📋 Educational institution integration
+- 📋 Mobile app release
+
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
-## Contact
+## Contact & Support
 
-- Developer: IamSmitChitroda
-- Email: [Your Email]
-- Repository: [GitHub](https://github.com/IamSmitChitroda/quiz_ai_app)
-- Live Demo: [Quiz AI App](https://quiz-ai-app-4bd19.web.app/)
+- **Developer**: Smit Chitroda
+- **GitHub**: [@IamSmitChitroda](https://github.com/IamSmitChitroda)
+- **Live Demo**: [Quiz AI App](https://quiz-ai-app-4bd19.web.app/)
+- **Issues**: [GitHub Issues](https://github.com/IamSmitChitroda/quiz_ai_app/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/IamSmitChitroda/quiz_ai_app/discussions)
 
-## Star ⭐ the Repository
+## Show Your Support ⭐
+
+If you find this project useful, please consider:
+1. Giving it a star on GitHub
+2. Sharing it with others who might benefit
+3. Contributing to its development
 
 If you find this project useful, please consider giving it a star on GitHub to show your support!

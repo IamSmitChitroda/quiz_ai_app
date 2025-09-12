@@ -57,6 +57,7 @@ dependencies:
   # Local storage
   shared_preferences: ^2.2.2
   equatable: ^2.0.7
+  google_sign_in_web: ^0.12.4+4
 
 dev_dependencies:
   flutter_test:
