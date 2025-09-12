@@ -5,9 +5,9 @@ class ResultsSummary extends StatelessWidget {
   final Quiz quiz;
 
   const ResultsSummary({
-    Key? key,
+    super.key,
     required this.quiz,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

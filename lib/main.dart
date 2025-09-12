@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'features/chat/presentation/chat_screen.dart';
 import 'features/dashboard/presentation/dashboard_screen.dart';
 import 'features/quiz/repositories/quiz_repository.dart';
 import 'features/quiz/services/quiz_service.dart';

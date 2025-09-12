@@ -5,7 +5,7 @@ import 'question_card.dart';
 import 'results_summary.dart';
 
 class QuizRunner extends StatelessWidget {
-  const QuizRunner({Key? key}) : super(key: key);
+  const QuizRunner({super.key});
 
   @override
   Widget build(BuildContext context) {

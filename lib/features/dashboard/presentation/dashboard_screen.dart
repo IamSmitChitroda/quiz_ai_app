@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../chat/presentation/chat_screen.dart';
 import '../../question_answer/presentation/question_answer_screen.dart';
 import '../../quiz/presentation/quiz_screen.dart';
 
@@ -31,6 +32,18 @@ class DashboardScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              _buildNavigationCard(
+                context,
+                'Chat',
+                'Have an engaging conversation with AI',
+                Icons.chat_bubble_outline,
+                () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const ChatScreen(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
               _buildNavigationCard(
                 context,
                 'Question & Answer',
